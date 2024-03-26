@@ -13,18 +13,15 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    env:
+      name: test
+      api: ${{env.API}}
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-      - uses: falnyr/replace-env-vars-action@master
-        env:
-          name: test
-          api: ${{env.API}}
-        with:
-          filename: /myapp/.env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
