@@ -7,7 +7,7 @@ export default function Home() {
 
     console.log(process.env)
   }
-
+  
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -53,7 +53,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2>
-            Docs <span>-&gt;</span><>{getEnv()}</>
+            Docs <span>-&gt;</span>{process.env.api}
           </h2>
           <p>Find in-depth information about Next.js features and API.</p>
         </a>
