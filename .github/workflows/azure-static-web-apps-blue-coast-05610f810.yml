@@ -19,6 +19,12 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - uses: falnyr/replace-env-vars-action@master
+        env:
+          name: test
+          api: ${{env.API}}
+        with:
+          filename: /my-app/.env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
