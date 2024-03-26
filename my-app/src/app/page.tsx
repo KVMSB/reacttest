@@ -2,6 +2,12 @@ import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
+
+  const getEnv=()=>{
+
+    console.log(process.env)
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -47,7 +53,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2>
-            Docs <span>-&gt;</span>{process.env.api}
+            Docs <span>-&gt;</span><>{getEnv()}</>
           </h2>
           <p>Find in-depth information about Next.js features and API.</p>
         </a>
