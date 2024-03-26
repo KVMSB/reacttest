@@ -21,7 +21,7 @@ jobs:
           lfs: false
       - name: 'Create env file'
         run: |
-          touch .env
+          touch /my-app/.env
           echo api=${{vars.API}} >> .env
           cat .env
       - name: Build And Deploy
