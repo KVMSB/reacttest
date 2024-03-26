@@ -22,8 +22,8 @@ jobs:
       - name: 'Create env file'
         run: |
           touch ./my-app/.env
-          echo api=${{vars.API}} >> .env
-          cat .env
+          echo api=${{vars.API}} >> ./my-app/.env
+          cat ./my-app/.env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
