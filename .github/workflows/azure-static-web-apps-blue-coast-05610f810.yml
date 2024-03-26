@@ -22,7 +22,7 @@ jobs:
       - name: 'Create env file'
         run: |
           touch .env
-          echo api=${{env.API}} >> .env
+          echo api=${{vars.API}} >> .env
           cat .env
       - name: Build And Deploy
         id: builddeploy
