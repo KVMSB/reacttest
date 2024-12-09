@@ -20,19 +20,27 @@ jobs:
           node-version: 18 # Use the Node.js version your app requires
 
       # Step 3: Install dependencies
+     
+      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd my-app 
+          npm install
 
       # Step 4: Inject environment variables
       - name: Set up environment variables
         run: |
-          echo "REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}" >> .env
-          echo "REACT_APP_TENANTID: ${{ vars.REACT_APP_TENANTID }}" >> .env
-          echo  "REACT_APP_BASEURL: ${{ vars.REACT_APP_BASEURL }}" >> .env
+          touch ./my-app/.env
+          echo "REACT_APP_CLIENT_ID: ${{ vars.REACT_APP_CLIENT_ID }}" >> ./my-app/.env
+          echo "REACT_APP_TENANTID: ${{ vars.REACT_APP_TENANTID }}" >> ./my-app/.env
+          echo  "REACT_APP_BASEURL: ${{ vars.REACT_APP_BASEURL }}" >> ./my-app/.env
+          cat ./my-app/.env
 
       # Step 5: Build the React app
       - name: Build React app
-        run: npm run build
+        run: |
+          cd my-app 
+          npm run build
 
       # Step 6: Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
