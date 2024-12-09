@@ -53,3 +53,4 @@ jobs:
           app_location: "./my-app" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
+          deployment_action: deploy
