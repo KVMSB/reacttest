@@ -20,7 +20,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 export const PageLayout = (props) => {
     const isAuthenticated = useIsAuthenticated();
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
   
     const handleProfileMenuOpen = (event) => {
@@ -83,6 +83,8 @@ export const PageLayout = (props) => {
           </Toolbar>
         </AppBar>
         {renderMenu}
+
+        {props.children}
       </Box>
     );
     return (
