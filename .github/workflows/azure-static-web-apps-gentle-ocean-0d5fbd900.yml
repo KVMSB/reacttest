@@ -19,6 +19,14 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Set up environment variables
+        run: |
+          touch ./my-app/.env
+          echo "REACT_APP_CLIENT_ID=${{ vars.REACT_APP_CLIENT_ID }}" >> ./my-app/.env
+          echo "REACT_APP_TENANTID=${{ vars.REACT_APP_TENANTID }}" >> ./my-app/.env
+          echo "REACT_APP_BASEURL=${{ vars.REACT_APP_BASEURL }}" >> ./my-app/.env
+          cat ./my-app/.env
+  
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
