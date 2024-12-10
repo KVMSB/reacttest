@@ -18,7 +18,7 @@ const MainContent = () => {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
 const [workSpaceDetails, setWorkSpaceDetails] = useState();
-    
+    const [noAccess, setNoAccess] = useState(false);
     useEffect(() => {
         const login = async () => {
             try {
@@ -47,17 +47,22 @@ const [workSpaceDetails, setWorkSpaceDetails] = useState();
     useEffect(()=>{
         if(isAuthenticated){
             getReports(accounts[0].username).then((res)=>{
+                if(!res?.data){
+                    setNoAccess(true);
+                }
+                else{
                 setWorkSpaceDetails(res?.data[0]);
+                }
             })
         }
     },[isAuthenticated])
 
     return (
-      <PageLayout {...workSpaceDetails}>
+      <PageLayout accounts={accounts[0]} workSpaceDetails={workSpaceDetails}>
         <div className="App">
             {isAuthenticated ? (
                 <>
-                 {workSpaceDetails?<PowerBIReport {...workSpaceDetails}/>:null}
+                 {workSpaceDetails && !noAccess?<PowerBIReport {...workSpaceDetails}/>:<p>You don't have access. Please contact your adminstrator</p>}
                  </>
             ) : (
                 <p>Redirecting to login...</p>

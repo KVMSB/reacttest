@@ -48,6 +48,7 @@ export const PageLayout = (props) => {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
+        <MenuItem onClick={handleMenuClose}>{props?.accounts?.username}</MenuItem>
         <MenuItem onClick={handleMenuClose}><SignOutButton /></MenuItem>
       </Menu>
     );
@@ -62,7 +63,7 @@ export const PageLayout = (props) => {
               component="div"
               sx={{ display: { xs: 'none', sm: 'block' } }}
             >
-              DeepForrest | {props?.name}
+              DeepForrest {props?.workSpaceDetails?.name?`| ${props?.workSpaceDetails.name}`:null}
             </Typography>
   
             <Box sx={{ flexGrow: 1 }} />
@@ -86,18 +87,5 @@ export const PageLayout = (props) => {
 
         {props.children}
       </Box>
-    );
-    return (
-        <>
-            <Navbar bg="primary" variant="dark" className="navbarStyle">
-                <a className="navbar-brand" href="/">
-                    DeepForest | {props.name}
-                </a>
-                <div className="collapse navbar-collapse justify-content-end">
-                    {isAuthenticated ? <SignOutButton /> : <SignInButton />}
-                </div>
-            </Navbar>
-            {props.children}
-        </>
     );
 };
