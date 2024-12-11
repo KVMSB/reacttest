@@ -38,8 +38,7 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          cd my-app
-          zip release.zip build -r
+          zip release.zip ./build -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
