@@ -38,13 +38,14 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          zip release.zip my-app/build -r
+          cd my-app
+          zip release.zip build -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: my-app/release.zip
 
   deploy:
     runs-on: ubuntu-latest
