@@ -15,3 +15,9 @@ code {
 .navbar{
   background-color: #000 !important;
 }
+
+.hospital{
+  background-color: #fff;
+  align-items: center;
+  display: flex;
+}

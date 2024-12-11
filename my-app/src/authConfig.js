@@ -4,8 +4,6 @@
  */
 
 import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
-import { appSettings } from "./constants";
-import { useMsal } from "@azure/msal-react";
 
 /**
  * Configuration object to be passed to MSAL instance on creation. 
@@ -59,6 +57,14 @@ export const loginRequest = {
     scopes: ["User.Read"]
 };
 
+export const tokenRequest = {
+    scopes: [`api://${process.env.REACT_APP_CLIENT_ID}/.default`]
+};
+
+export const options = {
+    loginType: "Redirect",
+    tokenRefreshUri: window.location.origin + "./auth.html",
+  };
 /**
  * Add here the scopes to request when obtaining an access token for MS Graph API. For more information, see:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
@@ -66,3 +72,5 @@ export const loginRequest = {
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me" //e.g. https://graph.microsoft.com/v1.0/me
 };
+
+export const authProvider = new PublicClientApplication(msalConfig, loginRequest, options)

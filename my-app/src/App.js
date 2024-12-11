@@ -18,6 +18,8 @@ const MainContent = () => {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
 const [workSpaceDetails, setWorkSpaceDetails] = useState();
+const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
+
     const [noAccess, setNoAccess] = useState(false);
     useEffect(() => {
         const login = async () => {
@@ -46,19 +48,28 @@ const [workSpaceDetails, setWorkSpaceDetails] = useState();
 
     useEffect(()=>{
         if(isAuthenticated){
-            getReports(accounts[0].username).then((res)=>{
+            instance
+            .acquireTokenSilent({
+                ...loginRequest,
+                account: accounts[0],
+            })
+            .then((response) => {
+            getReports( response.idToken).then((res)=>{
                 if(!res?.data){
                     setNoAccess(true);
                 }
                 else{
+                setAllWorkSpaceDetails(res?.data);
+                    
                 setWorkSpaceDetails(res?.data[0]);
                 }
             })
+        })
         }
     },[isAuthenticated])
 
     return (
-      <PageLayout accounts={accounts[0]} workSpaceDetails={workSpaceDetails}>
+      <PageLayout accounts={accounts[0]} workSpaceDetails={workSpaceDetails} allWorkSpaceDetails={allWorkSpaceDetails} setWorkSpaceDetails={setWorkSpaceDetails}>
         <div className="App">
             {isAuthenticated ? (
                 <>

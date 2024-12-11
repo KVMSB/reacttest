@@ -5,21 +5,29 @@ import { useMsal } from '@azure/msal-react';
 import { getEmbedDetails, getReports } from '../services/apiService';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import * as powerbi from 'powerbi-client';
 import { ListItemButton } from '@mui/material';
+import { loginRequest } from '../authConfig';
 
 const PowerBIReport = (props) => {
     const [pages, setPages] = useState([]);
     const [selectedPage, setSelectedPage] = useState(null);
     const { instance, accounts } = useMsal();
     const [embedDetails, setEmbedDetails] = useState(null);
+    
     useEffect(() => {
+        instance
+            .acquireTokenSilent({
+                ...loginRequest,
+                account: accounts[0],
+            })
+            .then((response) => {
+                console.log(response)
         getEmbedDetails(props.reportID, props.workspaceID).then(res => {
             setEmbedDetails(res.data.embedUrl);
             setPages(res.data.embedUrl.pages)
             setSelectedPage(res.data.embedUrl.pages[0])
         });
+    });
 
     }, [props])
 
