@@ -21,8 +21,17 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Set up environment variables
+        run: |
+          touch ./my-app/.env
+          echo "REACT_APP_CLIENT_ID=${{ vars.REACT_APP_CLIENT_ID }}" >> ./my-app/.env
+          echo "REACT_APP_TENANTID=${{ vars.REACT_APP_TENANTID }}" >> ./my-app/.env
+          echo "REACT_APP_BASEURL=${{ vars.REACT_APP_BASEURL }}" >> ./my-app/.env
+          cat ./my-app/.env
+
       - name: npm install, build, and test
         run: |
+          cd my-app
           npm install
           npm run build --if-present
           npm run test --if-present
