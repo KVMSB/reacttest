@@ -10,7 +10,7 @@ import { appSettings } from './constants';
 import axios from 'axios';
 import { getReports } from './services/apiService';
 import PowerBIReport from './components/powerBiReport';
-
+import {ApiCallWithLoader} from './components/loader.js';
 // Ensure the instance is initialized at the root level
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -19,8 +19,10 @@ const MainContent = () => {
     const isAuthenticated = useIsAuthenticated();
 const [workSpaceDetails, setWorkSpaceDetails] = useState();
 const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
+const [loading, setLoading] = useState(false);
 
     const [noAccess, setNoAccess] = useState(false);
+    
     useEffect(() => {
         const login = async () => {
             try {
@@ -48,6 +50,7 @@ const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
 
     useEffect(()=>{
         if(isAuthenticated){
+            setLoading(true);
             instance
             .acquireTokenSilent({
                 ...loginRequest,
@@ -62,6 +65,7 @@ const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
                 setAllWorkSpaceDetails(res?.data);
                     
                 setWorkSpaceDetails(res?.data[0]);
+                setLoading(false);
                 }
             })
         })
@@ -71,7 +75,7 @@ const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
     return (
       <PageLayout accounts={accounts[0]} workSpaceDetails={workSpaceDetails} allWorkSpaceDetails={allWorkSpaceDetails} setWorkSpaceDetails={setWorkSpaceDetails}>
         <div className="App">
-            {isAuthenticated ? (
+            {isAuthenticated && !loading ? (
                 <>
                  {workSpaceDetails && !noAccess?<PowerBIReport {...workSpaceDetails}/>:<p>You don't have access. Please contact your adminstrator</p>}
                  </>
@@ -79,6 +83,7 @@ const [allWorkSpaceDetails, setAllWorkSpaceDetails] = useState();
                 <p>Redirecting to login...</p>
             )}
         </div>
+        <ApiCallWithLoader loading={loading}/>
         </PageLayout>
     );
 };

@@ -7,14 +7,17 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { ListItemButton } from '@mui/material';
 import { loginRequest } from '../authConfig';
+import {ApiCallWithLoader} from './loader.js';
 
 const PowerBIReport = (props) => {
     const [pages, setPages] = useState([]);
     const [selectedPage, setSelectedPage] = useState(null);
     const { instance, accounts } = useMsal();
     const [embedDetails, setEmbedDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
     
     useEffect(() => {
+        setLoading(true);
         instance
             .acquireTokenSilent({
                 ...loginRequest,
@@ -26,6 +29,7 @@ const PowerBIReport = (props) => {
             setEmbedDetails(res.data.embedUrl);
             setPages(res.data.embedUrl.pages)
             setSelectedPage(res.data.embedUrl.pages[0])
+            setLoading(false);
         });
     });
 
@@ -84,6 +88,8 @@ const PowerBIReport = (props) => {
                         />
                     </div>
                 </> : null}
+
+            <ApiCallWithLoader loading={loading}/>
         </div>
     );
 };
