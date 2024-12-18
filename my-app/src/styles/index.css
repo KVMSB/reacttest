@@ -21,3 +21,25 @@ code {
   align-items: center;
   display: flex;
 }
+
+.MuiAppBar-root{
+  background-color:#07774E !important;
+}
+
+.logo{
+  width:136px;
+  margin-top:5px;
+  margin-right:5px;
+}
+
+.logtxt{
+  margin-top: 18px;
+  margin-left:5px;
+}
+
+.logodiv{
+  display:contents;
+  margin-left:5px;
+  font-size:22px;
+}
+

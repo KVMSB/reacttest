@@ -106,13 +106,15 @@ export const PageLayout = (props) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+        <img src="/DeepForrest_logo.svg" class="logo"/>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            class="logodiv"
+            sx={{ display: { xs: 'block' } }}
           >
-            DeepForrest {props?.workSpaceDetails?.name ? `| ${props?.workSpaceDetails.name}` : null}
+             {props?.workSpaceDetails?.name ? <> | <p class="logtxt"> {props?.workSpaceDetails.name} </p> </>: null}
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
