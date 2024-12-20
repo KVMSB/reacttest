@@ -1,1 +1,3 @@
 my-app/.env
+/my-app/package-lock.json
+/my-app/.vs

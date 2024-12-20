@@ -7,15 +7,66 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { ListItemButton } from '@mui/material';
 import { loginRequest } from '../authConfig';
-import {ApiCallWithLoader} from './loader.js';
+import { ApiCallWithLoader } from './loader.js';
+import { jwtDecode } from 'jwt-decode';
 
 const PowerBIReport = (props) => {
     const [pages, setPages] = useState([]);
     const [selectedPage, setSelectedPage] = useState(null);
     const { instance, accounts } = useMsal();
     const [embedDetails, setEmbedDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-    
+    const [loading, setLoading] = useState(false);
+
+
+    const [decodedToken, setDecodedToken] = useState(null);
+
+
+    const onRefresh = () => {
+        instance
+            .acquireTokenSilent({
+                ...loginRequest,
+                account: accounts[0],
+            })
+            .then((response) => {
+                getEmbedDetails(props.reportID, props.workspaceID).then(res => {
+                    setEmbedDetails(res.data.embedUrl);
+                    setPages(res.data.embedUrl.pages)
+                    setSelectedPage(res.data.embedUrl.pages[0])
+                });
+            })
+    }
+
+    useEffect(() => {
+        if (embedDetails?.token) {
+            const decoded = decodeToken(embedDetails.token);
+            setDecodedToken(decoded);
+
+            if (decoded && decoded.exp) {
+                const currentTime = Date.now() / 1000; // Convert to seconds
+                const expirationTime = decoded.exp - currentTime;
+
+                if (expirationTime > 0) {
+                    // Set a timer to refresh the token before expiration
+                    const timer = setTimeout(() => {
+                        onRefresh();
+                    }, (expirationTime - 60) * 1000); // Refresh 1 minute before expiry
+
+                    return () => clearTimeout(timer); // Cleanup the timer
+                }
+            }
+        }
+    }, [embedDetails, onRefresh]);
+
+    const decodeToken = (token) => {
+        try {
+            return jwtDecode(token);
+        } catch (error) {
+            console.error('Failed to decode JWT token:', error);
+            return null;
+        }
+    };
+
+
     useEffect(() => {
         setLoading(true);
         instance
@@ -24,14 +75,13 @@ const PowerBIReport = (props) => {
                 account: accounts[0],
             })
             .then((response) => {
-                console.log(response)
-        getEmbedDetails(props.reportID, props.workspaceID).then(res => {
-            setEmbedDetails(res.data.embedUrl);
-            setPages(res.data.embedUrl.pages)
-            setSelectedPage(res.data.embedUrl.pages[0])
-            setLoading(false);
-        });
-    });
+                getEmbedDetails(props.reportID, props.workspaceID).then(res => {
+                    setEmbedDetails(res.data.embedUrl);
+                    setPages(res.data.embedUrl.pages)
+                    setSelectedPage(res.data.embedUrl.pages[0])
+                    setLoading(false);
+                });
+            });
 
     }, [props])
 
@@ -68,7 +118,7 @@ const PowerBIReport = (props) => {
                             <ListItem
                                 button
                                 key={page.name}
-                                className={selectedPage?.name === page.name?'selected':''}
+                                className={selectedPage?.name === page.name ? 'selected' : ''}
                             >
                                 <ListItemButton
                                     selected={selectedPage?.name === page.name}
@@ -89,7 +139,7 @@ const PowerBIReport = (props) => {
                     </div>
                 </> : null}
 
-            <ApiCallWithLoader loading={loading}/>
+            <ApiCallWithLoader loading={loading} />
         </div>
     );
 };
