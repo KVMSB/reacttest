@@ -18,3 +18,11 @@ export const getEmbedDetails=async (reportId, workspaceId, token)=>{
         }
        })
 }
+
+export const updateUserLoginTime=async(token)=>{
+    return await axiosInstance.post('/UserReport/updateLoginTime',{},{
+        headers:{
+            Authorization: `Bearer ${token}`
+        } 
+    });
+}

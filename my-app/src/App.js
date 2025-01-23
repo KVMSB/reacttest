@@ -8,7 +8,7 @@ import { callMsGraph } from './graph';
 import { PageLayout } from './components/PageLayout';
 import { appSettings } from './constants';
 import axios from 'axios';
-import { getReports } from './services/apiService';
+import { getReports, updateUserLoginTime } from './services/apiService';
 import PowerBIReport from './components/powerBiReport';
 import {ApiCallWithLoader} from './components/loader.js';
 // Ensure the instance is initialized at the root level
@@ -48,9 +48,20 @@ const [loading, setLoading] = useState(false);
         login();
     }, [instance, isAuthenticated]);
 
+    const updateLoginTime=()=>{
+        instance
+        .acquireTokenSilent({
+            ...loginRequest,
+            account: accounts[0],
+        })
+        .then((response) => {
+            updateUserLoginTime(response.idToken);
+        })
+    }
     useEffect(()=>{
         if(isAuthenticated){
             setLoading(true);
+            updateLoginTime();
             instance
             .acquireTokenSilent({
                 ...loginRequest,
